@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تلاوات - الموقع الرسمي</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #0288d1;
+            --primary-dark: #01579b;
+            --primary-light: #4fc3f7;
+            --bg-light: #f5f7fa;
+            --white: #ffffff;
+            --text-main: #2c3e50;
+            --text-secondary: #7f8c8d;
+            --shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+        
+        body {
+            background: var(--bg-light);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+        
+        /* الهيدر البسيط */
+        .header {
+            background: var(--white);
+            padding: 15px 20px;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo i {
+            font-size: 28px;
+            color: var(--primary);
+        }
+        
+        .logo h1 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        /* بطاقة التطبيق الرئيسية */
+        .app-card {
+            background: var(--white);
+            border-radius: 25px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+        
+        .app-icon {
+            width: 120px;
+            height: 120px;
+            background: var(--primary);
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 50px;
+        }
+        
+        .app-info {
+            flex: 1;
+        }
+        
+        .app-info h2 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+        
+        .app-meta {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        
+        .download-btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        
+        /* قسم المميزات */
+        .section-title {
+            font-size: 22px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .feature-item {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            display: flex;
+            gap: 15px;
+        }
+        
+        .feature-icon {
+            width: 45px;
+            height: 45px;
+            background: var(--primary-light);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 20px;
+        }
+        
+        .feature-text h4 {
+            margin-bottom: 5px;
+        }
+        
+        .feature-text p {
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+        
+        /* معرض الصور */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+        
+        .gallery-item {
+            aspect-ratio: 9/16;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        
+        .gallery-item:hover {
+            transform: scale(1.02);
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        /* قائمة التحديثات */
+        .updates-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+        
+        .update-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            transition: 0.2s;
+            border: 2px solid transparent;
+            position: relative;
+        }
+        
+        .update-card:hover {
+            border-color: var(--primary);
+        }
+        
+        .update-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .update-version {
+            background: var(--primary);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .update-date {
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+        
+        .update-features {
+            list-style: none;
+            margin-top: 10px;
+        }
+        
+        .update-features li {
+            margin-bottom: 5px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .update-features i {
+            color: var(--primary);
+            font-size: 10px;
+        }
+        
+        .update-download {
+            display: inline-block;
+            margin-top: 10px;
+            background: #4CAF50;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 12px;
+        }
+        
+        /* صفحة التحديث المنبثقة */
+        .update-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .update-modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: var(--white);
+            border-radius: 30px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 30px;
+            position: relative;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: #f0f0f0;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        
+        .modal-gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        /* زر الأدمن */
+        .admin-trigger {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 45px;
+            height: 45px;
+            background: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            z-index: 90;
+        }
+        
+        /* لوحة التحكم */
+        .admin-panel {
+            background: var(--white);
+            border-radius: 25px;
+            padding: 25px;
+            margin-top: 30px;
+            display: none;
+        }
+        
+        .admin-panel.active {
+            display: block;
+        }
+        
+        .admin-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #eee;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+        
+        .admin-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            width: 100%;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+        
+        .admin-btn.delete {
+            background: #ff4757;
+        }
+        
+        .admin-btn.edit {
+            background: #ffa502;
+        }
+        
+        .file-input {
+            border: 2px dashed #ddd;
+            padding: 20px;
+            text-align: center;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            cursor: pointer;
+        }
+        
+        /* قائمة التحديثات في لوحة التحكم */
+        .admin-update-item {
+            background: #f9f9f9;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-right: 3px solid var(--primary);
+        }
+        
+        .admin-update-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .admin-update-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .admin-update-actions button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="logo">
+        <i class="fas fa-mosque"></i>
+        <h1>تلاوات</h1>
+    </div>
+    <div style="display: flex; gap: 15px;">
+        <i class="fas fa-download" style="color: var(--primary); cursor: pointer;" onclick="scrollToDownload()"></i>
+        <i class="fas fa-user-cog" style="color: #666; cursor: pointer;" onclick="toggleAdmin()"></i>
+    </div>
+</div>
+
+<div class="container">
+    
+    <!-- بطاقة التطبيق -->
+    <div class="app-card">
+        <div class="app-icon">
+            <i class="fas fa-mosque"></i>
+        </div>
+        <div class="app-info">
+            <h2 id="appNameDisplay">تطبيق تلاوات</h2>
+            <div class="app-meta" id="appMetaDisplay">الإصدار v1.4.0 · 136 MB</div>
+            <p id="appDescDisplay">استمع إلى أروع التلاوات القرآنية الخاشعة. أكثر من 100 تلاوة نادرة بأصوات أشهر القراء.</p>
+            <a href="#" class="download-btn" id="mainDownloadBtn"><i class="fas fa-download"></i> تحميل التطبيق</a>
+        </div>
+    </div>
+    
+    <!-- المميزات -->
+    <h3 class="section-title"><i class="fas fa-star" style="color: var(--primary);"></i> مميزات التطبيق</h3>
+    <div class="features-grid" id="featuresContainer"></div>
+    
+    <!-- لقطات الشاشة -->
+    <h3 class="section-title"><i class="fas fa-images" style="color: var(--primary);"></i> لقطات من التطبيق</h3>
+    <div class="gallery" id="screenshotsContainer"></div>
+    
+    <!-- التحديثات -->
+    <h3 class="section-title"><i class="fas fa-history" style="color: var(--primary);"></i> آخر التحديثات</h3>
+    <div class="updates-list" id="updatesContainer"></div>
+    
+</div>
+
+<!-- نافذة التحديث المنبثقة -->
+<div class="update-modal" id="updateModal">
+    <div class="modal-content">
+        <div class="close-modal" onclick="closeModal()">✕</div>
+        <h2 id="modalVersion"></h2>
+        <div style="color: #666; margin-bottom: 15px;" id="modalDate"></div>
+        
+        <h4>المميزات الجديدة:</h4>
+        <ul id="modalFeatures"></ul>
+        
+        <h4 style="margin-top: 20px;">صور التحديث:</h4>
+        <div class="modal-gallery" id="modalScreenshots"></div>
+        
+        <a href="#" class="download-btn" style="margin-top: 20px; display: block; text-align: center;" id="modalDownloadBtn" target="_blank">تحميل هذا الإصدار</a>
+    </div>
+</div>
+
+<!-- زر الأدمن -->
+<div class="admin-trigger" onclick="toggleAdmin()">
+    <i class="fas fa-cog"></i>
+</div>
+
+<!-- لوحة التحكم -->
+<div class="container">
+    <div class="admin-panel" id="adminPanel">
+        <h3 style="margin-bottom: 20px;">🔐 دخول الأدمن</h3>
+        <input type="password" id="adminPass" class="admin-input" placeholder="كلمة المرور">
+        <button class="admin-btn" onclick="checkAdminPass()">دخول</button>
+    </div>
+    
+    <div class="admin-panel" id="adminControls">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+            <h3>👑 لوحة التحكم</h3>
+            <button onclick="logout()" style="background: #ff4757; color: white; border: none; padding: 5px 15px; border-radius: 20px;">تسجيل خروج</button>
+        </div>
+        
+        <!-- عام -->
+        <h4>📱 معلومات التطبيق</h4>
+        <input type="text" id="editAppName" class="admin-input" placeholder="اسم التطبيق">
+        <textarea id="editAppDesc" class="admin-input" rows="2" placeholder="وصف التطبيق"></textarea>
+        <input type="text" id="editAppVersion" class="admin-input" placeholder="الإصدار الحالي">
+        <input type="text" id="editAppSize" class="admin-input" placeholder="الحجم">
+        <input type="text" id="editMainDownload" class="admin-input" placeholder="رابط التحميل الرئيسي">
+        <button class="admin-btn" onclick="saveGeneral()">💾 حفظ المعلومات</button>
+        
+        <hr style="margin: 20px 0;">
+        
+        <!-- إضافة تحديث جديد -->
+        <h4>📦 إضافة تحديث جديد</h4>
+        <input type="text" id="newVersion" class="admin-input" placeholder="رقم الإصدار (مثال: v1.5.0)">
+        <input type="text" id="newDate" class="admin-input" placeholder="التاريخ (مثال: 24 فبراير 2026)">
+        <textarea id="newFeatures" class="admin-input" rows="4" placeholder="المميزات (كل ميزة في سطر)"></textarea>
+        <input type="text" id="newUpdateDownload" class="admin-input" placeholder="رابط تحميل هذا الإصدار">
+        
+        <h5 style="margin: 15px 0;">صور التحديث (اختياري)</h5>
+        <div class="file-input" onclick="document.getElementById('updateImages').click()">
+            <i class="fas fa-cloud-upload-alt" style="font-size: 24px; margin-bottom: 10px; display: block;"></i>
+            <span>اضغط لاختيار صور التحديث</span>
+        </div>
+        <input type="file" id="updateImages" multiple accept="image/*" style="display: none;" onchange="handleUpdateImages(this)">
+        <div id="selectedImages" style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px;"></div>
+        
+        <button class="admin-btn" onclick="addUpdate()">➕ إضافة التحديث</button>
+        
+        <hr style="margin: 20px 0;">
+        
+        <!-- قائمة التحديثات الحالية -->
+        <h4>📋 التحديثات الحالية</h4>
+        <div id="updatesListAdmin"></div>
+        
+        <hr style="margin: 20px 0;">
+        
+        <!-- إضافة صورة للمعرض -->
+        <h4>🖼️ إضافة صورة للمعرض</h4>
+        <div class="file-input" onclick="document.getElementById('galleryImage').click()">
+            <i class="fas fa-cloud-upload-alt"></i> اختر صورة
+        </div>
+        <input type="file" id="galleryImage" accept="image/*" style="display: none;" onchange="addGalleryImage(this)">
+    </div>
+</div>
+
+<div class="footer">
+    تطبيق تلاوات · جميع الحقوق محفوظة © 2026
+</div>
+
+<script>
+    // ===== كلمة السر =====
+    const ADMIN_PASSWORD = "talawat2026";
+    
+    // ===== البيانات =====
+    let appData = {
+        name: "تلاوات",
+        description: "استمع إلى أروع التلاوات القرآنية الخاشعة. أكثر من 100 تلاوة نادرة بأصوات أشهر القراء.",
+        version: "v1.4.0",
+        size: "136 MB",
+        downloadUrl: "https://salahahmedyn.free.nf/recitations/telewat.apk",
+        features: [
+            { icon: "fa-moon", title: "الوضع الليلي", desc: "واجهة مريحة للعين مع وضع ليلي أنيق." },
+            { icon: "fa-clock", title: "مؤقت النوم", desc: "اضبط المؤقت وبعد الوقت المحدد تتوقف التلاوة." },
+            { icon: "fa-heart", title: "المفضلة", desc: "احتفظ بالتلاوات التي تعجبك في قائمة خاصة." }
+        ],
+        screenshots: [],
+        updates: [
+            {
+                id: 1,
+                version: "v1.4.0",
+                date: "23 فبراير 2026",
+                downloadUrl: "https://salahahmedyn.free.nf/recitations/telewat.apk",
+                features: ["نظام الثيمات المتقدم", "تحسين الوضع الليلي", "إصلاح مشكلة البحث"],
+                images: []
+            },
+            {
+                id: 2,
+                version: "v1.3.0",
+                date: "10 فبراير 2026",
+                downloadUrl: "https://salahahmedyn.free.nf/recitations/telewat.apk",
+                features: ["إضافة مؤقت النوم الفخم", "تحسينات في واجهة المستخدم"],
+                images: []
+            }
+        ]
+    };
+    
+    // ===== تحميل البيانات =====
+    function loadData() {
+        const saved = localStorage.getItem('talawatSite');
+        if (saved) {
+            try {
+                appData = JSON.parse(saved);
+            } catch (e) {}
+        }
+    }
+    
+    // ===== حفظ البيانات =====
+    function saveData() {
+        localStorage.setItem('talawatSite', JSON.stringify(appData));
+    }
+    
+    // ===== عرض الموقع =====
+    function renderSite() {
+        // معلومات عامة
+        document.getElementById('appNameDisplay').textContent = appData.name;
+        document.getElementById('appMetaDisplay').textContent = `الإصدار ${appData.version} · ${appData.size}`;
+        document.getElementById('appDescDisplay').textContent = appData.description;
+        document.getElementById('mainDownloadBtn').href = appData.downloadUrl;
+        
+        // المميزات
+        document.getElementById('featuresContainer').innerHTML = appData.features.map(f => `
+            <div class="feature-item">
+                <div class="feature-icon"><i class="fas ${f.icon}"></i></div>
+                <div class="feature-text">
+                    <h4>${f.title}</h4>
+                    <p>${f.desc}</p>
+                </div>
+            </div>
+        `).join('');
+        
+        // لقطات الشاشة
+        document.getElementById('screenshotsContainer').innerHTML = appData.screenshots.map(img => `
+            <div class="gallery-item" onclick="viewImage('${img}')">
+                <img src="${img}" alt="لقطة شاشة">
+            </div>
+        `).join('');
+        
+        // التحديثات
+        document.getElementById('updatesContainer').innerHTML = appData.updates.map((u, index) => `
+            <div class="update-card" onclick="showUpdateModal(${index})">
+                <div class="update-header">
+                    <span class="update-version">${u.version}</span>
+                    <span class="update-date">${u.date}</span>
+                </div>
+                <ul class="update-features">
+                    ${u.features.slice(0, 2).map(f => `<li><i class="fas fa-check"></i> ${f}</li>`).join('')}
+                    ${u.features.length > 2 ? `<li>... و${u.features.length - 2} ميزات أخرى</li>` : ''}
+                </ul>
+                <a href="${u.downloadUrl}" class="update-download" onclick="event.stopPropagation();" target="_blank"><i class="fas fa-download"></i> تحميل</a>
+            </div>
+        `).join('');
+    }
+    
+    // ===== عرض لوحة التحكم =====
+    function renderAdminUpdates() {
+        const container = document.getElementById('updatesListAdmin');
+        container.innerHTML = appData.updates.map((u, index) => `
+            <div class="admin-update-item">
+                <div class="admin-update-header">
+                    <strong>${u.version} - ${u.date}</strong>
+                    <div class="admin-update-actions">
+                        <button class="edit" onclick="editUpdate(${index})" style="background:#ffa502; color:white;">✏️ تعديل</button>
+                        <button class="delete" onclick="deleteUpdate(${index})" style="background:#ff4757; color:white;">🗑️ حذف</button>
+                    </div>
+                </div>
+                <div style="font-size:12px; margin-bottom:5px;">
+                    <strong>الرابط:</strong> <a href="${u.downloadUrl}" target="_blank">${u.downloadUrl.substring(0,30)}...</a>
+                </div>
+                <div style="font-size:12px;">
+                    <strong>المميزات:</strong> ${u.features.length} ميزة
+                </div>
+                ${u.images && u.images.length ? `<div style="font-size:12px; margin-top:5px;">📸 ${u.images.length} صورة</div>` : ''}
+            </div>
+        `).join('');
+    }
+    
+    // ===== صفحة التحديث =====
+    function showUpdateModal(index) {
+        const update = appData.updates[index];
+        document.getElementById('modalVersion').textContent = update.version;
+        document.getElementById('modalDate').textContent = update.date;
+        document.getElementById('modalFeatures').innerHTML = update.features.map(f => `<li>✓ ${f}</li>`).join('');
+        document.getElementById('modalScreenshots').innerHTML = (update.images || []).map(img => `
+            <img src="${img}" style="width:100%; border-radius:10px;">
+        `).join('');
+        document.getElementById('modalDownloadBtn').href = update.downloadUrl;
+        document.getElementById('updateModal').classList.add('active');
+    }
+    
+    function closeModal() {
+        document.getElementById('updateModal').classList.remove('active');
+    }
+    
+    function viewImage(src) {
+        window.open(src, '_blank');
+    }
+    
+    // ===== الإدارة =====
+    function toggleAdmin() {
+        const panel = document.getElementById('adminPanel');
+        panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+    }
+    
+    function checkAdminPass() {
+        const pass = document.getElementById('adminPass').value;
+        if (pass === ADMIN_PASSWORD) {
+            document.getElementById('adminPanel').style.display = 'none';
+            document.getElementById('adminControls').style.display = 'block';
+            loadAdminData();
+            renderAdminUpdates();
+        } else {
+            alert('❌ كلمة سر خطأ');
+        }
+    }
+    
+    function loadAdminData() {
+        document.getElementById('editAppName').value = appData.name;
+        document.getElementById('editAppDesc').value = appData.description;
+        document.getElementById('editAppVersion').value = appData.version;
+        document.getElementById('editAppSize').value = appData.size;
+        document.getElementById('editMainDownload').value = appData.downloadUrl;
+    }
+    
+    function saveGeneral() {
+        appData.name = document.getElementById('editAppName').value;
+        appData.description = document.getElementById('editAppDesc').value;
+        appData.version = document.getElementById('editAppVersion').value;
+        appData.size = document.getElementById('editAppSize').value;
+        appData.downloadUrl = document.getElementById('editMainDownload').value;
+        saveData();
+        renderSite();
+        alert('✅ تم حفظ المعلومات');
+    }
+    
+    let currentUpdateImages = [];
+    
+    function handleUpdateImages(input) {
+        const files = input.files;
+        const container = document.getElementById('selectedImages');
+        container.innerHTML = '';
+        currentUpdateImages = [];
+        
+        for (let file of files) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                container.innerHTML += `<img src="${e.target.result}" style="width:60px; height:60px; border-radius:8px; object-fit:cover;">`;
+                currentUpdateImages.push(e.target.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+    
+    function addUpdate() {
+        const version = document.getElementById('newVersion').value;
+        const date = document.getElementById('newDate').value;
+        const featuresText = document.getElementById('newFeatures').value;
+        const downloadUrl = document.getElementById('newUpdateDownload').value;
+        
+        if (!version || !date || !featuresText || !downloadUrl) {
+            alert('❌ املأ جميع الحقول');
+            return;
+        }
+        
+        const features = featuresText.split('\n').filter(f => f.trim());
+        
+        // إنشاء ID جديد
+        const newId = appData.updates.length > 0 ? Math.max(...appData.updates.map(u => u.id)) + 1 : 1;
+        
+        appData.updates.unshift({
+            id: newId,
+            version,
+            date,
+            downloadUrl,
+            features,
+            images: currentUpdateImages
+        });
+        
+        saveData();
+        renderSite();
+        renderAdminUpdates();
+        
+        // تفريغ الحقول
+        document.getElementById('newVersion').value = '';
+        document.getElementById('newDate').value = '';
+        document.getElementById('newFeatures').value = '';
+        document.getElementById('newUpdateDownload').value = '';
+        document.getElementById('selectedImages').innerHTML = '';
+        currentUpdateImages = [];
+        
+        alert('✅ تم إضافة التحديث');
+    }
+    
+    function deleteUpdate(index) {
+        if (confirm(`⚠️ هل أنت متأكد من حذف التحديث ${appData.updates[index].version}؟`)) {
+            appData.updates.splice(index, 1);
+            saveData();
+            renderSite();
+            renderAdminUpdates();
+            alert('✅ تم حذف التحديث');
+        }
+    }
+    
+    function editUpdate(index) {
+        const update = appData.updates[index];
+        
+        document.getElementById('newVersion').value = update.version;
+        document.getElementById('newDate').value = update.date;
+        document.getElementById('newFeatures').value = update.features.join('\n');
+        document.getElementById('newUpdateDownload').value = update.downloadUrl;
+        
+        // إزالة التحديث القديم
+        appData.updates.splice(index, 1);
+        
+        // تمرير الصفحة لقسم الإضافة
+        window.scrollTo({ top: document.getElementById('newVersion').offsetTop - 100, behavior: 'smooth' });
+        
+        alert('✏️ تم تحميل البيانات للتعديل');
+    }
+    
+    function addGalleryImage(input) {
+        const file = input.files[0];
+        if (!file) return;
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            appData.screenshots.push(e.target.result);
+            saveData();
+            renderSite();
+            alert('✅ تم إضافة الصورة');
+        };
+        reader.readAsDataURL(file);
+    }
+    
+    function logout() {
+        document.getElementById('adminControls').style.display = 'none';
+        document.getElementById('adminPass').value = '';
+    }
+    
+    function scrollToDownload() {
+        document.querySelector('.app-card').scrollIntoView({ behavior: 'smooth' });
+    }
+    
+    // ===== بدء التشغيل =====
+    loadData();
+    renderSite();
+</script>
+</body>
+</html>
