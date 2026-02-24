@@ -161,7 +161,7 @@
             font-size: 13px;
         }
         
-        /* معرض الصور */
+        /* معرض الصور - مع إمكانية الحذف */
         .gallery {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -176,6 +176,7 @@
             box-shadow: var(--shadow);
             cursor: pointer;
             transition: 0.2s;
+            position: relative;
         }
         
         .gallery-item:hover {
@@ -186,6 +187,28 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+        }
+        
+        .delete-photo {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            background: #ff4757;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: 0.2s;
+            z-index: 10;
+        }
+        
+        .gallery-item:hover .delete-photo {
+            opacity: 1;
         }
         
         /* قائمة التحديثات */
@@ -379,6 +402,40 @@
             cursor: pointer;
         }
         
+        /* معرض الصور في لوحة التحكم */
+        .admin-gallery {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .admin-gallery-item {
+            position: relative;
+            aspect-ratio: 9/16;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .admin-gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .admin-gallery-item button {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            background: #ff4757;
+            color: white;
+            border: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        
         /* قائمة التحديثات في لوحة التحكم */
         .admin-update-item {
             background: #f9f9f9;
@@ -441,7 +498,7 @@
             <h2 id="appNameDisplay">تطبيق تلاوات</h2>
             <div class="app-meta" id="appMetaDisplay">الإصدار v1.4.0 · 136 MB</div>
             <p id="appDescDisplay">استمع إلى أروع التلاوات القرآنية الخاشعة. أكثر من 100 تلاوة نادرة بأصوات أشهر القراء.</p>
-            <a href="#" class="download-btn" id="mainDownloadBtn"><i class="fas fa-download"></i> حمله الان</a>
+            <a href="#" class="download-btn" id="mainDownloadBtn"><i class="fas fa-download"></i> تحميل</a>
         </div>
     </div>
     
@@ -506,6 +563,19 @@
         
         <hr style="margin: 20px 0;">
         
+        <!-- معرض الصور (إدارة) -->
+        <h4>🖼️ إدارة معرض الصور</h4>
+        <p style="margin-bottom:10px;">اختر عدة صور مرة واحدة (Ctrl + Click)</p>
+        <div class="file-input" onclick="document.getElementById('galleryImages').click()">
+            <i class="fas fa-cloud-upload-alt" style="font-size: 24px; margin-bottom: 10px; display: block;"></i>
+            <span>اضغط لاختيار صور متعددة</span>
+        </div>
+        <input type="file" id="galleryImages" multiple accept="image/*" style="display: none;" onchange="addMultipleImages(this)">
+        
+        <div class="admin-gallery" id="adminGalleryContainer"></div>
+        
+        <hr style="margin: 20px 0;">
+        
         <!-- إضافة تحديث جديد -->
         <h4>📦 إضافة تحديث جديد</h4>
         <input type="text" id="newVersion" class="admin-input" placeholder="رقم الإصدار (مثال: v1.5.0)">
@@ -513,10 +583,9 @@
         <textarea id="newFeatures" class="admin-input" rows="4" placeholder="المميزات (كل ميزة في سطر)"></textarea>
         <input type="text" id="newUpdateDownload" class="admin-input" placeholder="رابط تحميل هذا الإصدار">
         
-        <h5 style="margin: 15px 0;">صور التحديث (اختياري)</h5>
+        <h5 style="margin: 15px 0;">صور التحديث (اختياري - اختر عدة صور)</h5>
         <div class="file-input" onclick="document.getElementById('updateImages').click()">
-            <i class="fas fa-cloud-upload-alt" style="font-size: 24px; margin-bottom: 10px; display: block;"></i>
-            <span>اضغط لاختيار صور التحديث</span>
+            <i class="fas fa-cloud-upload-alt"></i> اختر صور التحديث
         </div>
         <input type="file" id="updateImages" multiple accept="image/*" style="display: none;" onchange="handleUpdateImages(this)">
         <div id="selectedImages" style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px;"></div>
@@ -528,15 +597,6 @@
         <!-- قائمة التحديثات الحالية -->
         <h4>📋 التحديثات الحالية</h4>
         <div id="updatesListAdmin"></div>
-        
-        <hr style="margin: 20px 0;">
-        
-        <!-- إضافة صورة للمعرض -->
-        <h4>🖼️ إضافة صورة للمعرض</h4>
-        <div class="file-input" onclick="document.getElementById('galleryImage').click()">
-            <i class="fas fa-cloud-upload-alt"></i> اختر صورة
-        </div>
-        <input type="file" id="galleryImage" accept="image/*" style="display: none;" onchange="addGalleryImage(this)">
     </div>
 </div>
 
@@ -554,7 +614,7 @@
         description: "استمع إلى أروع التلاوات القرآنية الخاشعة. أكثر من 100 تلاوة نادرة بأصوات أشهر القراء.",
         version: "v1.4.0",
         size: "136 MB",
-        downloadUrl: "https://www.mediafire.com/file/rr0hx82w6puhi5r/تلاوات_1.0.0.apk/file",
+        downloadUrl: "https://salahahmedyn.free.nf/recitations/telewat.apk",
         features: [
             { icon: "fa-moon", title: "الوضع الليلي", desc: "واجهة مريحة للعين مع وضع ليلي أنيق." },
             { icon: "fa-clock", title: "مؤقت النوم", desc: "اضبط المؤقت وبعد الوقت المحدد تتوقف التلاوة." },
@@ -615,10 +675,13 @@
             </div>
         `).join('');
         
-        // لقطات الشاشة
-        document.getElementById('screenshotsContainer').innerHTML = appData.screenshots.map(img => `
-            <div class="gallery-item" onclick="viewImage('${img}')">
-                <img src="${img}" alt="لقطة شاشة">
+        // لقطات الشاشة (مع زر حذف للصور - يظهر فقط للأدمن)
+        const isAdminPanelVisible = document.getElementById('adminControls').style.display === 'block';
+        
+        document.getElementById('screenshotsContainer').innerHTML = appData.screenshots.map((img, index) => `
+            <div class="gallery-item">
+                ${isAdminPanelVisible ? `<div class="delete-photo" onclick="deleteScreenshot(${index}); event.stopPropagation();"><i class="fas fa-trash"></i></div>` : ''}
+                <img src="${img}" alt="لقطة شاشة" onclick="viewImage('${img}')">
             </div>
         `).join('');
         
@@ -634,6 +697,17 @@
                     ${u.features.length > 2 ? `<li>... و${u.features.length - 2} ميزات أخرى</li>` : ''}
                 </ul>
                 <a href="${u.downloadUrl}" class="update-download" onclick="event.stopPropagation();" target="_blank"><i class="fas fa-download"></i> تحميل</a>
+            </div>
+        `).join('');
+    }
+    
+    // ===== عرض معرض الصور في لوحة التحكم =====
+    function renderAdminGallery() {
+        const container = document.getElementById('adminGalleryContainer');
+        container.innerHTML = appData.screenshots.map((img, index) => `
+            <div class="admin-gallery-item">
+                <img src="${img}" alt="لقطة شاشة">
+                <button onclick="deleteScreenshot(${index})"><i class="fas fa-trash"></i></button>
             </div>
         `).join('');
     }
@@ -695,6 +769,8 @@
             document.getElementById('adminControls').style.display = 'block';
             loadAdminData();
             renderAdminUpdates();
+            renderAdminGallery();
+            renderSite(); // إعادة عرض الموقع مع أزرار الحذف
         } else {
             alert('❌ كلمة سر خطأ');
         }
@@ -717,6 +793,57 @@
         saveData();
         renderSite();
         alert('✅ تم حفظ المعلومات');
+    }
+    
+    // إضافة صور متعددة للمعرض
+    function addMultipleImages(input) {
+        const files = input.files;
+        if (!files.length) return;
+        
+        for (let file of files) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                appData.screenshots.push(e.target.result);
+                if (files.length === 1 || reader === files[files.length-1]) {
+                    saveData();
+                    renderSite();
+                    renderAdminGallery();
+                    alert(`✅ تم إضافة ${files.length} صورة`);
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        // إذا كان هناك أكثر من صورة، ننتظر آخر صورة لحفظ البيانات
+        if (files.length > 1) {
+            let loaded = 0;
+            for (let file of files) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    appData.screenshots.push(e.target.result);
+                    loaded++;
+                    if (loaded === files.length) {
+                        saveData();
+                        renderSite();
+                        renderAdminGallery();
+                        alert(`✅ تم إضافة ${files.length} صورة`);
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+        
+        input.value = ''; // تفريغ الحقل
+    }
+    
+    // حذف صورة
+    function deleteScreenshot(index) {
+        if (confirm('⚠️ هل أنت متأكد من حذف هذه الصورة؟')) {
+            appData.screenshots.splice(index, 1);
+            saveData();
+            renderSite();
+            renderAdminGallery();
+        }
     }
     
     let currentUpdateImages = [];
@@ -804,23 +931,10 @@
         alert('✏️ تم تحميل البيانات للتعديل');
     }
     
-    function addGalleryImage(input) {
-        const file = input.files[0];
-        if (!file) return;
-        
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            appData.screenshots.push(e.target.result);
-            saveData();
-            renderSite();
-            alert('✅ تم إضافة الصورة');
-        };
-        reader.readAsDataURL(file);
-    }
-    
     function logout() {
         document.getElementById('adminControls').style.display = 'none';
         document.getElementById('adminPass').value = '';
+        renderSite(); // إعادة عرض الموقع بدون أزرار الحذف
     }
     
     function scrollToDownload() {
