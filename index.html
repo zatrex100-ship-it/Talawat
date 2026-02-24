@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>تلاوات - الموقع الرسمي</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Firebase SDK (مش ح نستخدمه) -->
+    <!-- JSONBin.io API -->
     <style>
         * {
             margin: 0;
@@ -161,7 +163,7 @@
             font-size: 13px;
         }
         
-        /* معرض الصور - مع إمكانية الحذف */
+        /* معرض الصور */
         .gallery {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -187,6 +189,22 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+        }
+        
+        .no-content {
+            text-align: center;
+            padding: 40px;
+            background: var(--white);
+            border-radius: 20px;
+            color: var(--text-secondary);
+            font-size: 16px;
+            margin-bottom: 40px;
+        }
+        
+        .no-content i {
+            font-size: 50px;
+            margin-bottom: 15px;
+            opacity: 0.3;
         }
         
         .delete-photo {
@@ -335,6 +353,14 @@
             margin: 20px 0;
         }
         
+        .modal-no-images {
+            text-align: center;
+            padding: 30px;
+            background: #f9f9f9;
+            border-radius: 15px;
+            color: var(--text-secondary);
+        }
+        
         /* زر الأدمن */
         .admin-trigger {
             position: fixed;
@@ -402,7 +428,6 @@
             cursor: pointer;
         }
         
-        /* معرض الصور في لوحة التحكم */
         .admin-gallery {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -436,7 +461,6 @@
             cursor: pointer;
         }
         
-        /* قائمة التحديثات في لوحة التحكم */
         .admin-update-item {
             background: #f9f9f9;
             border-radius: 15px;
@@ -498,7 +522,7 @@
             <h2 id="appNameDisplay">تطبيق تلاوات</h2>
             <div class="app-meta" id="appMetaDisplay">الإصدار v1.4.0 · 136 MB</div>
             <p id="appDescDisplay">استمع إلى أروع التلاوات القرآنية الخاشعة. أكثر من 100 تلاوة نادرة بأصوات أشهر القراء.</p>
-            <a href="#" class="download-btn" id="mainDownloadBtn"><i class="fas fa-download"></i> تحميل</a>
+            <a href="#" class="download-btn" id="mainDownloadBtn" target="_blank"><i class="fas fa-download"></i> تحميل التطبيق</a>
         </div>
     </div>
     
@@ -510,7 +534,7 @@
     <h3 class="section-title"><i class="fas fa-images" style="color: var(--primary);"></i> لقطات من التطبيق</h3>
     <div class="gallery" id="screenshotsContainer"></div>
     
-    <!-- التحديثات -->
+    <!-- التحديثات السابقة -->
     <h3 class="section-title"><i class="fas fa-history" style="color: var(--primary);"></i> التحديثات السابقة</h3>
     <div class="updates-list" id="updatesContainer"></div>
     
@@ -605,10 +629,14 @@
 </div>
 
 <script>
+    // ===== JSONBin.io Settings =====
+    const BIN_ID = '699da886ae596e708f456ced';
+    const API_KEY = '$2a$10$bOww/M0vwXdrGxeN4wchdeLVZVs4ATfCIl1DkRv/wOfMcjIDJRvEy';
+    
     // ===== كلمة السر =====
     const ADMIN_PASSWORD = "talawat2026";
     
-    // ===== البيانات =====
+    // ===== البيانات الافتراضية =====
     let appData = {
         name: "تلاوات",
         description: "استمع إلى أروع التلاوات القرآنية الخاشعة. أكثر من 100 تلاوة نادرة بأصوات أشهر القراء.",
@@ -621,39 +649,38 @@
             { icon: "fa-heart", title: "المفضلة", desc: "احتفظ بالتلاوات التي تعجبك في قائمة خاصة." }
         ],
         screenshots: [],
-        updates: [
-            {
-                id: 1,
-                version: "v1.4.0",
-                date: "23 فبراير 2026",
-                downloadUrl: "https://salahahmedyn.free.nf/recitations/telewat.apk",
-                features: ["نظام الثيمات المتقدم", "تحسين الوضع الليلي", "إصلاح مشكلة البحث"],
-                images: []
-            },
-            {
-                id: 2,
-                version: "v1.3.0",
-                date: "10 فبراير 2026",
-                downloadUrl: "https://salahahmedyn.free.nf/recitations/telewat.apk",
-                features: ["إضافة مؤقت النوم الفخم", "تحسينات في واجهة المستخدم"],
-                images: []
-            }
-        ]
+        updates: []
     };
     
-    // ===== تحميل البيانات =====
-    function loadData() {
-        const saved = localStorage.getItem('talawatSite');
-        if (saved) {
-            try {
-                appData = JSON.parse(saved);
-            } catch (e) {}
+    // ===== تحميل البيانات من JSONBin.io =====
+    async function loadData() {
+        try {
+            const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+                headers: { 'X-Master-Key': API_KEY }
+            });
+            const data = await response.json();
+            appData = data.record;
+            renderSite();
+        } catch (error) {
+            console.log('خطأ في تحميل البيانات، استخدام البيانات الافتراضية', error);
+            renderSite();
         }
     }
     
-    // ===== حفظ البيانات =====
-    function saveData() {
-        localStorage.setItem('talawatSite', JSON.stringify(appData));
+    // ===== حفظ البيانات في JSONBin.io =====
+    async function saveData() {
+        try {
+            await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Master-Key': API_KEY
+                },
+                body: JSON.stringify(appData)
+            });
+        } catch (error) {
+            console.log('خطأ في حفظ البيانات', error);
+        }
     }
     
     // ===== عرض الموقع =====
@@ -675,64 +702,93 @@
             </div>
         `).join('');
         
-        // لقطات الشاشة (مع زر حذف للصور - يظهر فقط للأدمن)
-        const isAdminPanelVisible = document.getElementById('adminControls').style.display === 'block';
+        // لقطات الشاشة
+        const screenshotsContainer = document.getElementById('screenshotsContainer');
+        const isAdminPanelVisible = document.getElementById('adminControls')?.style.display === 'block';
         
-        document.getElementById('screenshotsContainer').innerHTML = appData.screenshots.map((img, index) => `
-            <div class="gallery-item">
-                ${isAdminPanelVisible ? `<div class="delete-photo" onclick="deleteScreenshot(${index}); event.stopPropagation();"><i class="fas fa-trash"></i></div>` : ''}
-                <img src="${img}" alt="لقطة شاشة" onclick="viewImage('${img}')">
-            </div>
-        `).join('');
-        
-        // التحديثات
-        document.getElementById('updatesContainer').innerHTML = appData.updates.map((u, index) => `
-            <div class="update-card" onclick="showUpdateModal(${index})">
-                <div class="update-header">
-                    <span class="update-version">${u.version}</span>
-                    <span class="update-date">${u.date}</span>
+        if (appData.screenshots && appData.screenshots.length > 0) {
+            screenshotsContainer.innerHTML = appData.screenshots.map((img, index) => `
+                <div class="gallery-item">
+                    ${isAdminPanelVisible ? `<div class="delete-photo" onclick="deleteScreenshot(${index}); event.stopPropagation();"><i class="fas fa-trash"></i></div>` : ''}
+                    <img src="${img}" alt="لقطة شاشة" onclick="viewImage('${img}')">
                 </div>
-                <ul class="update-features">
-                    ${u.features.slice(0, 2).map(f => `<li><i class="fas fa-check"></i> ${f}</li>`).join('')}
-                    ${u.features.length > 2 ? `<li>... و${u.features.length - 2} ميزات أخرى</li>` : ''}
-                </ul>
-                <a href="${u.downloadUrl}" class="update-download" onclick="event.stopPropagation();" target="_blank"><i class="fas fa-download"></i> تحميل</a>
-            </div>
-        `).join('');
+            `).join('');
+        } else {
+            screenshotsContainer.innerHTML = `
+                <div class="no-content">
+                    <i class="fas fa-image"></i>
+                    <p>لا توجد صور للتطبيق</p>
+                </div>
+            `;
+        }
+        
+        // التحديثات السابقة
+        const updatesContainer = document.getElementById('updatesContainer');
+        
+        if (appData.updates && appData.updates.length > 0) {
+            updatesContainer.innerHTML = appData.updates.map((u, index) => `
+                <div class="update-card" onclick="showUpdateModal(${index})">
+                    <div class="update-header">
+                        <span class="update-version">${u.version}</span>
+                        <span class="update-date">${u.date}</span>
+                    </div>
+                    <ul class="update-features">
+                        ${u.features.slice(0, 2).map(f => `<li><i class="fas fa-check"></i> ${f}</li>`).join('')}
+                        ${u.features.length > 2 ? `<li>... و${u.features.length - 2} ميزات أخرى</li>` : ''}
+                    </ul>
+                    <a href="${u.downloadUrl}" class="update-download" onclick="event.stopPropagation();" target="_blank"><i class="fas fa-download"></i> تحميل</a>
+                </div>
+            `).join('');
+        } else {
+            updatesContainer.innerHTML = `
+                <div class="no-content">
+                    <i class="fas fa-history"></i>
+                    <p>لا توجد تحديثات سابقة</p>
+                </div>
+            `;
+        }
     }
     
     // ===== عرض معرض الصور في لوحة التحكم =====
     function renderAdminGallery() {
         const container = document.getElementById('adminGalleryContainer');
-        container.innerHTML = appData.screenshots.map((img, index) => `
-            <div class="admin-gallery-item">
-                <img src="${img}" alt="لقطة شاشة">
-                <button onclick="deleteScreenshot(${index})"><i class="fas fa-trash"></i></button>
-            </div>
-        `).join('');
+        if (appData.screenshots && appData.screenshots.length > 0) {
+            container.innerHTML = appData.screenshots.map((img, index) => `
+                <div class="admin-gallery-item">
+                    <img src="${img}" alt="لقطة شاشة">
+                    <button onclick="deleteScreenshot(${index})"><i class="fas fa-trash"></i></button>
+                </div>
+            `).join('');
+        } else {
+            container.innerHTML = '<p style="text-align:center; color:#999;">لا توجد صور حالياً</p>';
+        }
     }
     
     // ===== عرض لوحة التحكم =====
     function renderAdminUpdates() {
         const container = document.getElementById('updatesListAdmin');
-        container.innerHTML = appData.updates.map((u, index) => `
-            <div class="admin-update-item">
-                <div class="admin-update-header">
-                    <strong>${u.version} - ${u.date}</strong>
-                    <div class="admin-update-actions">
-                        <button class="edit" onclick="editUpdate(${index})" style="background:#ffa502; color:white;">✏️ تعديل</button>
-                        <button class="delete" onclick="deleteUpdate(${index})" style="background:#ff4757; color:white;">🗑️ حذف</button>
+        if (appData.updates && appData.updates.length > 0) {
+            container.innerHTML = appData.updates.map((u, index) => `
+                <div class="admin-update-item">
+                    <div class="admin-update-header">
+                        <strong>${u.version} - ${u.date}</strong>
+                        <div class="admin-update-actions">
+                            <button class="edit" onclick="editUpdate(${index})" style="background:#ffa502; color:white;">✏️ تعديل</button>
+                            <button class="delete" onclick="deleteUpdate(${index})" style="background:#ff4757; color:white;">🗑️ حذف</button>
+                        </div>
                     </div>
+                    <div style="font-size:12px; margin-bottom:5px;">
+                        <strong>الرابط:</strong> <a href="${u.downloadUrl}" target="_blank">${u.downloadUrl.substring(0,30)}...</a>
+                    </div>
+                    <div style="font-size:12px;">
+                        <strong>المميزات:</strong> ${u.features.length} ميزة
+                    </div>
+                    ${u.images && u.images.length ? `<div style="font-size:12px; margin-top:5px;">📸 ${u.images.length} صورة</div>` : ''}
                 </div>
-                <div style="font-size:12px; margin-bottom:5px;">
-                    <strong>الرابط:</strong> <a href="${u.downloadUrl}" target="_blank">${u.downloadUrl.substring(0,30)}...</a>
-                </div>
-                <div style="font-size:12px;">
-                    <strong>المميزات:</strong> ${u.features.length} ميزة
-                </div>
-                ${u.images && u.images.length ? `<div style="font-size:12px; margin-top:5px;">📸 ${u.images.length} صورة</div>` : ''}
-            </div>
-        `).join('');
+            `).join('');
+        } else {
+            container.innerHTML = '<p style="text-align:center; color:#999;">لا توجد تحديثات</p>';
+        }
     }
     
     // ===== صفحة التحديث =====
@@ -741,9 +797,20 @@
         document.getElementById('modalVersion').textContent = update.version;
         document.getElementById('modalDate').textContent = update.date;
         document.getElementById('modalFeatures').innerHTML = update.features.map(f => `<li>✓ ${f}</li>`).join('');
-        document.getElementById('modalScreenshots').innerHTML = (update.images || []).map(img => `
-            <img src="${img}" style="width:100%; border-radius:10px;">
-        `).join('');
+        
+        const modalScreenshots = document.getElementById('modalScreenshots');
+        if (update.images && update.images.length > 0) {
+            modalScreenshots.innerHTML = update.images.map(img => `
+                <img src="${img}" style="width:100%; border-radius:10px;">
+            `).join('');
+        } else {
+            modalScreenshots.innerHTML = `
+                <div class="modal-no-images">
+                    <p>لا توجد صور لهذا التحديث</p>
+                </div>
+            `;
+        }
+        
         document.getElementById('modalDownloadBtn').href = update.downloadUrl;
         document.getElementById('updateModal').classList.add('active');
     }
@@ -790,6 +857,7 @@
         appData.version = document.getElementById('editAppVersion').value;
         appData.size = document.getElementById('editAppSize').value;
         appData.downloadUrl = document.getElementById('editMainDownload').value;
+        
         saveData();
         renderSite();
         alert('✅ تم حفظ المعلومات');
@@ -800,11 +868,14 @@
         const files = input.files;
         if (!files.length) return;
         
+        let loaded = 0;
+        
         for (let file of files) {
             const reader = new FileReader();
             reader.onload = function(e) {
                 appData.screenshots.push(e.target.result);
-                if (files.length === 1 || reader === files[files.length-1]) {
+                loaded++;
+                if (loaded === files.length) {
                     saveData();
                     renderSite();
                     renderAdminGallery();
@@ -812,25 +883,6 @@
                 }
             };
             reader.readAsDataURL(file);
-        }
-        
-        // إذا كان هناك أكثر من صورة، ننتظر آخر صورة لحفظ البيانات
-        if (files.length > 1) {
-            let loaded = 0;
-            for (let file of files) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    appData.screenshots.push(e.target.result);
-                    loaded++;
-                    if (loaded === files.length) {
-                        saveData();
-                        renderSite();
-                        renderAdminGallery();
-                        alert(`✅ تم إضافة ${files.length} صورة`);
-                    }
-                };
-                reader.readAsDataURL(file);
-            }
         }
         
         input.value = ''; // تفريغ الحقل
@@ -943,7 +995,6 @@
     
     // ===== بدء التشغيل =====
     loadData();
-    renderSite();
 </script>
 </body>
 </html>
