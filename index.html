@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>تلاوات - الموقع الرسمي</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Firebase SDK (مش ح نستخدمه) -->
-    <!-- JSONBin.io API -->
     <style>
         * {
             margin: 0;
@@ -32,7 +30,6 @@
             line-height: 1.6;
         }
         
-        /* الهيدر البسيط */
         .header {
             background: var(--white);
             padding: 15px 20px;
@@ -67,7 +64,6 @@
             padding: 30px 20px;
         }
         
-        /* بطاقة التطبيق الرئيسية */
         .app-card {
             background: var(--white);
             border-radius: 25px;
@@ -117,7 +113,6 @@
             margin-top: 15px;
         }
         
-        /* قسم المميزات */
         .section-title {
             font-size: 22px;
             margin-bottom: 20px;
@@ -163,7 +158,6 @@
             font-size: 13px;
         }
         
-        /* معرض الصور */
         .gallery {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -229,7 +223,6 @@
             opacity: 1;
         }
         
-        /* قائمة التحديثات */
         .updates-list {
             display: flex;
             flex-direction: column;
@@ -302,7 +295,6 @@
             font-size: 12px;
         }
         
-        /* صفحة التحديث المنبثقة */
         .update-modal {
             position: fixed;
             top: 0;
@@ -361,7 +353,6 @@
             color: var(--text-secondary);
         }
         
-        /* زر الأدمن */
         .admin-trigger {
             position: fixed;
             bottom: 20px;
@@ -378,7 +369,6 @@
             z-index: 90;
         }
         
-        /* لوحة التحكم */
         .admin-panel {
             background: var(--white);
             border-radius: 25px;
@@ -513,7 +503,6 @@
 
 <div class="container">
     
-    <!-- بطاقة التطبيق -->
     <div class="app-card">
         <div class="app-icon">
             <i class="fas fa-mosque"></i>
@@ -526,21 +515,17 @@
         </div>
     </div>
     
-    <!-- المميزات -->
     <h3 class="section-title"><i class="fas fa-star" style="color: var(--primary);"></i> مميزات التطبيق</h3>
     <div class="features-grid" id="featuresContainer"></div>
     
-    <!-- لقطات الشاشة -->
     <h3 class="section-title"><i class="fas fa-images" style="color: var(--primary);"></i> لقطات من التطبيق</h3>
     <div class="gallery" id="screenshotsContainer"></div>
     
-    <!-- التحديثات السابقة -->
     <h3 class="section-title"><i class="fas fa-history" style="color: var(--primary);"></i> التحديثات السابقة</h3>
     <div class="updates-list" id="updatesContainer"></div>
     
 </div>
 
-<!-- نافذة التحديث المنبثقة -->
 <div class="update-modal" id="updateModal">
     <div class="modal-content">
         <div class="close-modal" onclick="closeModal()">✕</div>
@@ -557,12 +542,10 @@
     </div>
 </div>
 
-<!-- زر الأدمن -->
 <div class="admin-trigger" onclick="toggleAdmin()">
     <i class="fas fa-cog"></i>
 </div>
 
-<!-- لوحة التحكم -->
 <div class="container">
     <div class="admin-panel" id="adminPanel">
         <h3 style="margin-bottom: 20px;">🔐 دخول الأدمن</h3>
@@ -576,7 +559,6 @@
             <button onclick="logout()" style="background: #ff4757; color: white; border: none; padding: 5px 15px; border-radius: 20px;">تسجيل خروج</button>
         </div>
         
-        <!-- عام -->
         <h4>📱 معلومات التطبيق</h4>
         <input type="text" id="editAppName" class="admin-input" placeholder="اسم التطبيق">
         <textarea id="editAppDesc" class="admin-input" rows="2" placeholder="وصف التطبيق"></textarea>
@@ -587,7 +569,6 @@
         
         <hr style="margin: 20px 0;">
         
-        <!-- معرض الصور (إدارة) -->
         <h4>🖼️ إدارة معرض الصور</h4>
         <p style="margin-bottom:10px;">اختر عدة صور مرة واحدة (Ctrl + Click)</p>
         <div class="file-input" onclick="document.getElementById('galleryImages').click()">
@@ -600,7 +581,6 @@
         
         <hr style="margin: 20px 0;">
         
-        <!-- إضافة تحديث جديد -->
         <h4>📦 إضافة تحديث جديد</h4>
         <input type="text" id="newVersion" class="admin-input" placeholder="رقم الإصدار (مثال: v1.5.0)">
         <input type="text" id="newDate" class="admin-input" placeholder="التاريخ (مثال: 24 فبراير 2026)">
@@ -618,7 +598,6 @@
         
         <hr style="margin: 20px 0;">
         
-        <!-- قائمة التحديثات الحالية -->
         <h4>📋 التحديثات الحالية</h4>
         <div id="updatesListAdmin"></div>
     </div>
@@ -631,7 +610,10 @@
 <script>
     // ===== JSONBin.io Settings =====
     const BIN_ID = '699da886ae596e708f456ced';
-    const API_KEY = '$2a$10$bOww/M0vwXdrGxeN4wchdeLVZVs4ATfCIl1DkRv/wOfMcjIDJRvEy';
+    const JSONBIN_API_KEY = '$2a$10$bOww/M0vwXdrGxeN4wchdeLVZVs4ATfCIl1DkRv/wOfMcjIDJRvEy';
+    
+    // ===== ImgBB Settings =====
+    const IMGBB_API_KEY = '45d8a6d3fcdbb4a8984e98f2b6d55e39';
     
     // ===== كلمة السر =====
     const ADMIN_PASSWORD = "talawat2026";
@@ -656,7 +638,7 @@
     async function loadData() {
         try {
             const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
-                headers: { 'X-Master-Key': API_KEY }
+                headers: { 'X-Master-Key': JSONBIN_API_KEY }
             });
             const data = await response.json();
             appData = data.record;
@@ -674,7 +656,7 @@
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-Master-Key': API_KEY
+                    'X-Master-Key': JSONBIN_API_KEY
                 },
                 body: JSON.stringify(appData)
             });
@@ -683,15 +665,82 @@
         }
     }
     
+    // ===== رفع صورة إلى ImgBB =====
+    async function uploadImage(file, callback) {
+        const formData = new FormData();
+        formData.append('image', file);
+        
+        try {
+            const response = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
+                method: 'POST',
+                body: formData
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                callback(data.data.url);
+            } else {
+                alert('❌ فشل رفع الصورة');
+            }
+        } catch (error) {
+            console.log('خطأ في رفع الصورة:', error);
+            alert('❌ حدث خطأ في رفع الصورة');
+        }
+    }
+    
+    // ===== إضافة صور متعددة للمعرض =====
+    function addMultipleImages(input) {
+        const files = input.files;
+        if (!files.length) return;
+        
+        let completed = 0;
+        
+        for (let file of files) {
+            uploadImage(file, (url) => {
+                appData.screenshots.push(url);
+                completed++;
+                if (completed === files.length) {
+                    saveData();
+                    renderSite();
+                    renderAdminGallery();
+                    alert(`✅ تم إضافة ${files.length} صورة`);
+                }
+            });
+        }
+        input.value = '';
+    }
+    
+    // ===== معالجة صور التحديثات =====
+    let currentUpdateImages = [];
+    
+    function handleUpdateImages(input) {
+        const files = input.files;
+        const container = document.getElementById('selectedImages');
+        container.innerHTML = '';
+        currentUpdateImages = [];
+        
+        let completed = 0;
+        
+        for (let file of files) {
+            uploadImage(file, (url) => {
+                container.innerHTML += `<img src="${url}" style="width:60px; height:60px; border-radius:8px; object-fit:cover;">`;
+                currentUpdateImages.push(url);
+                completed++;
+                if (completed === files.length) {
+                    console.log('تم رفع جميع صور التحديث');
+                }
+            });
+        }
+    }
+    
     // ===== عرض الموقع =====
     function renderSite() {
-        // معلومات عامة
         document.getElementById('appNameDisplay').textContent = appData.name;
         document.getElementById('appMetaDisplay').textContent = `الإصدار ${appData.version} · ${appData.size}`;
         document.getElementById('appDescDisplay').textContent = appData.description;
         document.getElementById('mainDownloadBtn').href = appData.downloadUrl;
         
-        // المميزات
         document.getElementById('featuresContainer').innerHTML = appData.features.map(f => `
             <div class="feature-item">
                 <div class="feature-icon"><i class="fas ${f.icon}"></i></div>
@@ -702,7 +751,6 @@
             </div>
         `).join('');
         
-        // لقطات الشاشة
         const screenshotsContainer = document.getElementById('screenshotsContainer');
         const isAdminPanelVisible = document.getElementById('adminControls')?.style.display === 'block';
         
@@ -722,7 +770,6 @@
             `;
         }
         
-        // التحديثات السابقة
         const updatesContainer = document.getElementById('updatesContainer');
         
         if (appData.updates && appData.updates.length > 0) {
@@ -749,7 +796,6 @@
         }
     }
     
-    // ===== عرض معرض الصور في لوحة التحكم =====
     function renderAdminGallery() {
         const container = document.getElementById('adminGalleryContainer');
         if (appData.screenshots && appData.screenshots.length > 0) {
@@ -764,7 +810,6 @@
         }
     }
     
-    // ===== عرض لوحة التحكم =====
     function renderAdminUpdates() {
         const container = document.getElementById('updatesListAdmin');
         if (appData.updates && appData.updates.length > 0) {
@@ -791,7 +836,6 @@
         }
     }
     
-    // ===== صفحة التحديث =====
     function showUpdateModal(index) {
         const update = appData.updates[index];
         document.getElementById('modalVersion').textContent = update.version;
@@ -823,7 +867,6 @@
         window.open(src, '_blank');
     }
     
-    // ===== الإدارة =====
     function toggleAdmin() {
         const panel = document.getElementById('adminPanel');
         panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
@@ -837,7 +880,7 @@
             loadAdminData();
             renderAdminUpdates();
             renderAdminGallery();
-            renderSite(); // إعادة عرض الموقع مع أزرار الحذف
+            renderSite();
         } else {
             alert('❌ كلمة سر خطأ');
         }
@@ -863,56 +906,12 @@
         alert('✅ تم حفظ المعلومات');
     }
     
-    // إضافة صور متعددة للمعرض
-    function addMultipleImages(input) {
-        const files = input.files;
-        if (!files.length) return;
-        
-        let loaded = 0;
-        
-        for (let file of files) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                appData.screenshots.push(e.target.result);
-                loaded++;
-                if (loaded === files.length) {
-                    saveData();
-                    renderSite();
-                    renderAdminGallery();
-                    alert(`✅ تم إضافة ${files.length} صورة`);
-                }
-            };
-            reader.readAsDataURL(file);
-        }
-        
-        input.value = ''; // تفريغ الحقل
-    }
-    
-    // حذف صورة
     function deleteScreenshot(index) {
         if (confirm('⚠️ هل أنت متأكد من حذف هذه الصورة؟')) {
             appData.screenshots.splice(index, 1);
             saveData();
             renderSite();
             renderAdminGallery();
-        }
-    }
-    
-    let currentUpdateImages = [];
-    
-    function handleUpdateImages(input) {
-        const files = input.files;
-        const container = document.getElementById('selectedImages');
-        container.innerHTML = '';
-        currentUpdateImages = [];
-        
-        for (let file of files) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                container.innerHTML += `<img src="${e.target.result}" style="width:60px; height:60px; border-radius:8px; object-fit:cover;">`;
-                currentUpdateImages.push(e.target.result);
-            };
-            reader.readAsDataURL(file);
         }
     }
     
@@ -928,8 +927,6 @@
         }
         
         const features = featuresText.split('\n').filter(f => f.trim());
-        
-        // إنشاء ID جديد
         const newId = appData.updates.length > 0 ? Math.max(...appData.updates.map(u => u.id)) + 1 : 1;
         
         appData.updates.unshift({
@@ -945,7 +942,6 @@
         renderSite();
         renderAdminUpdates();
         
-        // تفريغ الحقول
         document.getElementById('newVersion').value = '';
         document.getElementById('newDate').value = '';
         document.getElementById('newFeatures').value = '';
@@ -974,10 +970,8 @@
         document.getElementById('newFeatures').value = update.features.join('\n');
         document.getElementById('newUpdateDownload').value = update.downloadUrl;
         
-        // إزالة التحديث القديم
         appData.updates.splice(index, 1);
         
-        // تمرير الصفحة لقسم الإضافة
         window.scrollTo({ top: document.getElementById('newVersion').offsetTop - 100, behavior: 'smooth' });
         
         alert('✏️ تم تحميل البيانات للتعديل');
@@ -986,14 +980,13 @@
     function logout() {
         document.getElementById('adminControls').style.display = 'none';
         document.getElementById('adminPass').value = '';
-        renderSite(); // إعادة عرض الموقع بدون أزرار الحذف
+        renderSite();
     }
     
     function scrollToDownload() {
         document.querySelector('.app-card').scrollIntoView({ behavior: 'smooth' });
     }
     
-    // ===== بدء التشغيل =====
     loadData();
 </script>
 </body>
